@@ -129,9 +129,13 @@ if (servicio_existe){
         servicio_disponible.sort(ordenar_precio);
     }
     
-    
+    if (prompt("¿Quiere ordenarlos por calificación? [Y/N]: ")=="Y"){
+        servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));
+    }
+
     show_servicios_disponibles(servicio_disponible);
     
+
     let eleccion = prompt("Elija un servicio:"); 
     let envio = prompt("¿Necesita envío a domicilio? [Y/N]:");
     let pago = parseInt(prompt("Eliga el medio de pago: [1-Mercado Pago (0%) / 2-CBU (10%)"));

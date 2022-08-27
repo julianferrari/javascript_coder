@@ -65,38 +65,78 @@ function recargos(precio, envio, pago){
     return recargo
 }
 
+// Funciones para mostrar los servicios.
+function show_servicios(lista){
+    let lista_aux = []; 
+    lista.forEach(function(item){ //Para que no muestre oficios repetidos.
+        if(!lista_aux.includes(item.oficio)){
+            lista_aux.push(item.oficio);
+        }
+    })
+    let temp = "Los servicios disponibles son: \n";
+    for(let x=0; x<lista_aux.length; x++){
+        temp += lista_aux[x] + " \n";
+    }
+    alert(temp);
+}
+
+function show_servicios_disponibles(lista){
+    temp = "Los servicios disponibles son: \n";
+    for(let x=0; x<lista.length; x++){
+        temp += x + "- " + lista[x].nombre + " " + lista[x].apellido + " - AR$ " + lista[x].precio + " - Calificación: " + lista[x].calificacion+"\n"; 
+    }
+    alert(temp);
+}
+
+function show_servicio_adquirido(item, envio, pago){
+    let precio = item.precio;
+    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));
+    let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
+    
+    temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + " " + item.apellido + "\n";
+    temp += "El precio es de AR$ "+ precio + "\n";
+    temp += "Se añaden AR$ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
+    temp += "En total usted paga AR$ " + total;
+
+    alert(temp);
+}
+
+function ordenar_precio(a,b){
+    return parseFloat(a.precio)-parseFloat(b.precio)
+}
+
+// ----------------------------------------------------------
+// ----------------------------------------------------------
 // ----------------------------------------------------------
 
-let lista_servicios = generar_servicios(20); //Genero una lista de servicios aleatoria.
+let lista_servicios = generar_servicios(100); //Genero una lista de servicios aleatoria.
 //console.log(lista_servicios[1].calificacion);
 //lista_servicios[1].get_presentacion();
 //lista_servicios[1].set_presentacion("Soy un profesional matriculado etc...");
 //lista_servicios[1].get_presentacion();
 
 
+show_servicios(lista_servicios);
 let servicio = prompt("¿Qué servicio quiere contratar?:");
-let lista_aux=[];
-// Busco si tengo el servicio solicitado y los guardo en un arreglo auxiliar.
-for (let x=0; x<lista_servicios.length; x++){ 
-    if (lista_servicios[x].oficio == servicio){
-        lista_aux.push(lista_servicios[x]);
+
+let servicio_existe = lista_servicios.find(servicios => servicios.oficio == servicio);
+console.log(servicio_existe);
+if (servicio_existe){
+    let servicio_disponible = lista_servicios.filter(servicios => servicios.oficio == servicio);
+    //console.log(servicio_disponible)
+
+    if (prompt("¿Quiere ordenarlos por precio? [Y/N]: ")=="Y"){
+        servicio_disponible.sort(ordenar_precio);
     }
-}
-//console.log(lista_aux);
-if(lista_aux.length != 0){ //Muestro los servicios disponibles.
-    console.log("Los servicios de",servicio,"disponibles son:")
-    for(let x=0; x<lista_aux.length; x++){
-        console.log(x+"- "+lista_aux[x].nombre+" "+lista_aux[x].apellido+" tiene una calificacion de "+lista_aux[x].calificacion+" y un precio de "+lista_aux[x].precio);
-    }
-    let eleccion = parseInt(prompt("Elija un servicio:"));
-    let precio = lista_aux[eleccion].precio;
+    
+    
+    show_servicios_disponibles(servicio_disponible);
+    
+    let eleccion = prompt("Elija un servicio:"); 
     let envio = prompt("¿Necesita envío a domicilio? [Y/N]:");
     let pago = parseInt(prompt("Eliga el medio de pago: [1-Mercado Pago (0%) / 2-CBU (10%)"));
-    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));
-    let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
-    console.log("El precio es de $",precio);
-    console.log("Se añaden $",recargo,"de recargo por el envio y el medio de pago elegido.")
-    console.log("En total usted paga $",total);
+    show_servicio_adquirido(servicio_disponible[eleccion], envio, pago); 
 }else{
-    console.log("No tenemos el servicio solicitado.")
+    alert("No tenemos el servicio solicitado.");
+    console.log("No tenemos el servicio solicitado.");
 }

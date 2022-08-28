@@ -125,18 +125,17 @@ if (servicio_existe){
     let servicio_disponible = lista_servicios.filter(servicios => servicios.oficio == servicio);
     //console.log(servicio_disponible)
 
-    if (prompt("¿Quiere ordenarlos por precio? [Y/N]: ")=="Y"){
+    let ordenamiento = parseInt(prompt("Ordenar a los prestadores de servicios por [0- Ninguna / 1-Precio / 2-Calificación]:"));
+    if (ordenamiento==1){
         servicio_disponible.sort(ordenar_precio);
-    }
-    
-    if (prompt("¿Quiere ordenarlos por calificación? [Y/N]: ")=="Y"){
+    }else if(ordenamiento==2){
         servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));
     }
-
+    
     show_servicios_disponibles(servicio_disponible);
     
 
-    let eleccion = prompt("Elija un servicio:"); 
+    let eleccion = prompt("Elija a un prestador de servicio:"); 
     let envio = prompt("¿Necesita envío a domicilio? [Y/N]:");
     let pago = parseInt(prompt("Eliga el medio de pago: [1-Mercado Pago (0%) / 2-CBU (10%)"));
     show_servicio_adquirido(servicio_disponible[eleccion], envio, pago); 

@@ -65,6 +65,11 @@ function recargos(precio, envio, pago){
     return recargo
 }
 
+function dolarizar(lista){
+    lista.precio = parseFloat(lista.precio) / 285; //Dolar hoy...
+    lista.precio = parseFloat(lista.precio.toFixed(2));
+}
+
 // Funciones para mostrar los servicios.
 function show_servicios(lista){
     let lista_aux = []; 
@@ -83,7 +88,7 @@ function show_servicios(lista){
 function show_servicios_disponibles(lista){
     temp = "Los servicios disponibles son: \n";
     for(let x=0; x<lista.length; x++){
-        temp += x + "- " + lista[x].nombre + " " + lista[x].apellido + " - AR$ " + lista[x].precio + " - Calificación: " + lista[x].calificacion+"\n"; 
+        temp += x + "- " + lista[x].nombre + " " + lista[x].apellido + " - $ " + lista[x].precio + " - Calificación: " + lista[x].calificacion+"\n"; 
     }
     alert(temp);
 }
@@ -94,11 +99,11 @@ function show_servicio_adquirido(item, envio, pago){
     let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
     
     temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + " " + item.apellido + "\n";
-    temp += "El precio es de AR$ "+ precio + "\n";
-    temp += "Se añaden AR$ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
-    temp += "En total usted paga AR$ " + total;
+    temp += "El precio es de $ "+ precio + "\n";
+    temp += "Se añaden $ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
+    temp += "En total usted paga $ " + total;
 
-    alert(temp);
+   alert(temp);
 }
 
 function ordenar_precio(a,b){
@@ -134,6 +139,11 @@ if (servicio_existe){
     
     show_servicios_disponibles(servicio_disponible);
     
+    if((prompt("¿Quiere ver los precios en dolares? [Y/N]:")) == "Y"){
+        servicio_disponible.map(dolarizar);
+        console.log(servicio_disponible);
+        show_servicios_disponibles(servicio_disponible);
+    }
 
     let eleccion = prompt("Elija a un prestador de servicio:"); 
     let envio = prompt("¿Necesita envío a domicilio? [Y/N]:");

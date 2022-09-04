@@ -69,6 +69,10 @@ function dolarizar(lista){
     lista.precio = parseFloat(lista.precio) / 285; //Dolar hoy...
     lista.precio = parseFloat(lista.precio.toFixed(2));
 }
+function pesificar(lista){
+    lista.precio = parseFloat(lista.precio) * 285; //Dolar hoy...
+    lista.precio = parseFloat(lista.precio.toFixed(2));
+}
 
 function get_servicios(lista){
     let lista_aux = []; 
@@ -80,8 +84,10 @@ function get_servicios(lista){
     return lista_aux
 }
 
+
 function mostrar_prestadores(){
-    disponibles_list = document.getElementById("disponibles_list");
+    let disponibles_list = document.getElementById("disponibles_list");
+    disponibles_list.innerHTML = "";
     for(let x=0; x<servicio_disponible.length; x++){
         let li = document.createElement("li");
         li.innerHTML = `<li>${x} - ${servicio_disponible[x].nombre} 
@@ -89,7 +95,7 @@ function mostrar_prestadores(){
                         - $ ${servicio_disponible[x].precio}
             - calificación: ${servicio_disponible[x].calificacion}</li>`
         disponibles_list.append(li); 
-    }
+    }   
 }
 
 function calcular_precio(item, envio, pago){
@@ -129,47 +135,70 @@ for(let x=0; x<lista_aux.length; x++){
     servicios_list.append(li);
 }
 
+let checkBox1 = document.getElementById("ordenar_precio");
+let checkBox2 = document.getElementById("ordenar_calificacion");
+let checkBox3 = document.getElementById("mostrar_dolares");
+checkBox1.addEventListener("click", function(){
+    if ((checkBox1.checked)&&(checkBox2.checked)){
+        checkBox2.checked = false;
+    }
+})
+checkBox2.addEventListener("click", function(){
+    if ((checkBox2.checked)&&(checkBox1.checked)){
+        checkBox1.checked = false;
+    }
+})
+
+let flagDolar = false;
 let servicio_disponible;
 let boton_servicio = document.getElementById("boton_servicio");
 boton_servicio.addEventListener("click", function(){
-    let servicio = document.getElementById("servicio");
-    //console.log(servicio.value);
-   
+    let servicio = document.getElementById("servicio");   
     let servicio_existe = lista_servicios.find(servicios => servicios.oficio == servicio.value);
-    
     if (servicio_existe){
         servicio_disponible = lista_servicios.filter(servicios => servicios.oficio == servicio.value);
-    
-        if((prompt("¿Quiere ver los precios en dolares? [Y/N]:")) == "Y"){
-            servicio_disponible.map(dolarizar);
-            //console.log(servicio_disponible);
-        }
-
-        let ordenamiento = parseInt(prompt("Ordenar a los prestadores de servicios por [0- Ninguna / 1-Precio / 2-Calificación]:"));
-        if (ordenamiento==1){
-            servicio_disponible.sort(ordenar_precio);
-        }else if(ordenamiento==2){
-            servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));
-        }
-
-        mostrar_prestadores();    
+        if((checkBox3.checked == false)&&(flagDolar==true)){servicio_disponible.map(pesificar);flagDolar=false;}
+        if((checkBox3.checked == true)&&(flagDolar==false)){servicio_disponible.map(dolarizar);flagDolar=true;}
+        if(checkBox1.checked == true){servicio_disponible.sort(ordenar_precio);}
+        if(checkBox2.checked == true){servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));}           
+        mostrar_prestadores();  
     }else{
         alert("Ese servicio no existe");
     }
 })
 
-let resultado = document.getElementById("resultado");
-let boton_prestador = document.getElementById("boton_prestador");
-boton_prestador.addEventListener("click", function(){
-    let eleccion = document.getElementById("prestador");
-    let envio = prompt("¿Necesita envío a domicilio? [Y/N]:");
-    let pago = parseInt(prompt("Eliga el medio de pago: [1-Mercado Pago (0%) / 2-CBU (10%)"));
-    let texto = calcular_precio(servicio_disponible[eleccion.value], envio, pago); 
-    console.log(texto);
-    resultado.innerHTML = texto;
+
+let checkBox_envio = document.getElementById("envio_domicilio");
+let checkBox_pagoMP = document.getElementById("pago_mp");
+let checkBox_pagoCBU = document.getElementById("pago_cbu");
+checkBox_pagoMP.addEventListener("click", function(){
+    if ((checkBox_pagoMP.checked)&&(checkBox_pagoCBU.checked)){
+        checkBox_pagoCBU.checked = false;
+    }
+})
+checkBox_pagoCBU.addEventListener("click", function(){
+    if ((checkBox_pagoCBU.checked)&&(checkBox_pagoMP.checked)){
+        checkBox_pagoMP.checked = false;
+    }
 })
 
 
+window.addEventListener("keydown", function(e){
+    if(e.key == "Enter"){
+        let resultado = document.getElementById("resultado");
+        let eleccion = document.getElementById("prestador");
+        if(eleccion.value != ""){
+            let envio = "N";
+            let pago = 1;
+            if(checkBox_envio.checked==true){envio="Y";}
+            if(checkBox_pagoMP.checked==true){pago=1;}
+            if(checkBox_pagoCBU.checked==true){pago=2;}
+            let texto = calcular_precio(servicio_disponible[eleccion.value], envio, pago);    
+            resultado.innerHTML = texto;  
+            resultado.scrollIntoView();      
+        }
+    }
+})
 
 
 

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío Complementario</title>
+    <title>Desafío Incorporar Eventos</title>
 </head>
 <body>  
      
-    <h1>Desafío Complementario</h1>
+    <h1>Desafío Incorporar Eventos</h1>
     <h2>Ferrari Julián</h2>
 
     <p>Sistema para contratar un servicio y calculadora de precios</p>
@@ -19,20 +19,21 @@
     <h3>Elija un Servicio</h3>
     <input type="text" id="servicio">
     <button id="boton_servicio">Aceptar</button>
-    
-    <!-- <div id="disponibles"></div> -->
+    <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
+    <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
+    <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
+
     <ul id="disponibles_list"></ul>
 
-    <h3>Elija el Prestador</h3>
+    <input type="checkbox" id="envio_domicilio"><label for="">Enviar a Domicilio</label>
+    <input type="checkbox" id="pago_mp" checked="checked"><label for="">Pagar con Mercado Pago</label>
+    <input type="checkbox" id="pago_cbu"><label for="">Pagar con CBU</label>
+
+    <h3>Ingrese el número del Prestador y presione ENTER</h3>
     <input type="text" id="prestador">
-    <button id="boton_prestador">Aceptar</button>
-
     <p id="resultado"></p>
-
-
-
-
-
+    <br>
+    <br>
 
 
     <script src="test.js"></script>

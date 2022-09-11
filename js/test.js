@@ -85,25 +85,88 @@ function get_servicios(lista){
 }
 
 
+
 function mostrar_prestadores(){
-    let disponibles_list = document.getElementById("disponibles_list");
+    let disponibles_list = document.getElementById("cards");
     disponibles_list.innerHTML = "";
     for(let x=0; x<servicio_disponible.length; x++){
-        let li = document.createElement("li");
-        li.innerHTML = `<li>${x} - ${servicio_disponible[x].nombre} 
-                            ${servicio_disponible[x].apellido}
-                        - $ ${servicio_disponible[x].precio}
-            - calificación: ${servicio_disponible[x].calificacion}</li>`
-        disponibles_list.append(li); 
-    }   
+        let card = document.createElement("div");
+        card.innerHTML =   `<div class="card" style="width: 18rem;">
+                                <img src="../assets/images/martillo.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h3 class="card-title">${servicio_disponible[x].nombre} ${servicio_disponible[x].apellido}</h3>
+                                    <h4 class="card-title">${servicio_disponible[x].oficio}</h4>  
+                                    $<span class="card-title">${servicio_disponible[x].precio}</span>
+                                    <h5 class="card-title">Calificación: ${servicio_disponible[x].calificacion}</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <a class="btn btn-primary boton_agregar">Agregar</a>
+                                </div>
+                            </div>`
+        disponibles_list.append(card);
+        let btn_compra = document.querySelectorAll(".boton_agregar");
+        for(let boton of btn_compra){
+            boton.addEventListener("click", agregar_servicio);
+        }
+    }
 }
 
+
+let carrito = [];
+
+function agregar_servicio(e){
+    let hijo = e.target;
+    let padre = hijo.parentNode;
+    let abuelo = padre.parentNode;
+    
+    let nombre_servicio = padre.querySelector("h3").textContent;
+    let oficio_servicio = padre.querySelector("h4").textContent;
+    let precio_servicio = padre.querySelector("span").textContent;
+    let calificacion_servicio = padre.querySelector("h5").textContent;
+    let img_servicio = abuelo.querySelector("img").src; 
+
+    let servicio = {
+        nombre: nombre_servicio,
+        oficio: oficio_servicio,
+        precio: precio_servicio,
+        calificacion: calificacion_servicio,
+        imagen: img_servicio,
+        cantidad: 1
+    };
+   
+    carrito.push(servicio);
+    console.log(carrito);
+    //Ahora lo paso a JSON porque no puedo guardar un arreglo de objetos.
+    let carrito_JSON = JSON.stringify(carrito);
+    localStorage.setItem("carrito", carrito_JSON);
+
+
+    mostrar_carrito(servicio);
+
+
+}
+
+function mostrar_carrito(servicio){
+    let fila = document.createElement("tr");
+    fila.innerHTML = `<td><img src="${servicio.imagen}"></td>
+                            <td>${servicio.nombre}</td>
+                            <td>${servicio.precio}</td>
+                            <td>${servicio.calificacion}</td>
+                            <td><button class="btn-danger">Quitar</button></td>`
+
+
+    
+    let tabla = document.getElementById("tbody");
+    tabla.append(fila);
+    
+}
+
+
 function calcular_precio(item, envio, pago){
-    let precio = item.precio;
-    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));
+    let precio = parseInt(item.precio);
+    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));  
     let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
     
-    temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + " " + item.apellido + "\n";
+    temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + "\n";
     temp += "El precio es de $ "+ precio + "\n";
     temp += "Se añaden $ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
     temp += "En total usted paga $ " + total;
@@ -161,11 +224,19 @@ boton_servicio.addEventListener("click", function(){
         if((checkBox3.checked == true)&&(flagDolar==false)){servicio_disponible.map(dolarizar);flagDolar=true;}
         if(checkBox1.checked == true){servicio_disponible.sort(ordenar_precio);}
         if(checkBox2.checked == true){servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));}           
-        mostrar_prestadores();  
+        mostrar_prestadores();
+        
+       
     }else{
         alert("Ese servicio no existe");
     }
 })
+
+
+
+
+
+
 
 
 let checkBox_envio = document.getElementById("envio_domicilio");
@@ -183,22 +254,25 @@ checkBox_pagoCBU.addEventListener("click", function(){
 })
 
 
-window.addEventListener("keydown", function(e){
-    if(e.key == "Enter"){
-        let resultado = document.getElementById("resultado");
-        let eleccion = document.getElementById("prestador");
-        if(eleccion.value != ""){
-            let envio = "N";
-            let pago = 1;
-            if(checkBox_envio.checked==true){envio="Y";}
-            if(checkBox_pagoMP.checked==true){pago=1;}
-            if(checkBox_pagoCBU.checked==true){pago=2;}
-            let texto = calcular_precio(servicio_disponible[eleccion.value], envio, pago);    
-            resultado.innerHTML = texto;  
-            resultado.scrollIntoView();      
-        }
+let resultado = document.getElementById("resultado");
+let boton_comprar = document.getElementById("boton_comprar");
+boton_comprar.addEventListener("click", function(){
+    let envio = "N";
+    let pago = 1;
+    if(checkBox_envio.checked==true){envio="Y";}
+    if(checkBox_pagoMP.checked==true){pago=1;}
+    if(checkBox_pagoCBU.checked==true){pago=2;}
+
+            
+    for(let i=0; i<carrito.length; i++){
+        let calculo = document.createElement("p");        
+        let texto = calcular_precio(carrito[i], envio, pago);    
+        calculo.innerHTML = `<p>${texto}</p>`;  
+        resultado.append(calculo);
+        //resultado.scrollIntoView();
     }
-})
+});
+
 
 
 

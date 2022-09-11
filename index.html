@@ -4,37 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío Incorporar Eventos</title>
+    
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <title>2da Entrega del Proyecto Final</title>
 </head>
+
 <body>  
      
-    <h1>Desafío Incorporar Eventos</h1>
-    <h2>Ferrari Julián</h2>
+    <div class="grillas">
 
-    <p>Sistema para contratar un servicio y calculadora de precios</p>
+        <h1>2da Entrega del Proyecto Final</h1>
+        <h2>Ferrari Julián</h2>
 
-    <h3>Los servicios disponibles son:</h3>
-    <ul id="servicios_list"></ul>
+        <p>Sistema para contratar un servicio y calculadora de precios</p>
 
-    <h3>Elija un Servicio</h3>
-    <input type="text" id="servicio">
-    <button id="boton_servicio">Aceptar</button>
-    <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
-    <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
-    <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
+        <h3>Los servicios disponibles son:</h3>
+        <ul id="servicios_list"></ul>
 
-    <ul id="disponibles_list"></ul>
+        <h3>Elija un Servicio</h3>
+        <input type="text" id="servicio">
+        <button id="boton_servicio">Aceptar</button>
+        <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
+        <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
+        <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
 
-    <input type="checkbox" id="envio_domicilio"><label for="">Enviar a Domicilio</label>
-    <input type="checkbox" id="pago_mp" checked="checked"><label for="">Pagar con Mercado Pago</label>
-    <input type="checkbox" id="pago_cbu"><label for="">Pagar con CBU</label>
+        <ul id="disponibles_list"></ul>
 
-    <h3>Ingrese el número del Prestador y presione ENTER</h3>
-    <input type="text" id="prestador">
-    <p id="resultado"></p>
+        <div id="cards"></div>
+        
+        <div class="containter" id="miCarrito">
+            <h3>Mi carrito</h3>
+            <table class="table table-dark miTabla">
+                <thead>
+                    <tr>
+                        <td>Imagen</td>
+                        <td>Nombre</td>
+                        <td>Precio</td>
+                        <td>Calificación</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+        </div>
 
 
-    <script src="test.js"></script>
+        <h3>Formas de Pago</h3>
+        <input type="checkbox" id="envio_domicilio"><label for="">Enviar a Domicilio</label>
+        <input type="checkbox" id="pago_mp" checked="checked"><label for="">Pagar con Mercado Pago</label>
+        <input type="checkbox" id="pago_cbu"><label for="">Pagar con CBU</label>
+        <button id="boton_comprar">COMPRAR</button>
+        <br>
+        <p id="resultado"></p>
+<!-- 
+        <h3>Ingrese el número del Prestador y presione ENTER</h3>
+        <input type="text" id="prestador">
+        <p id="resultado"></p>
+ -->
 
+        <script src="./js/test.js"></script>
+        <script src="./js/popper.min.js"></script>
+        <script src="./js/bootstrap.js"></script>
+
+    </div>
 </body>
+
 </html>

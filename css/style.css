@@ -1,0 +1,15 @@
+#cards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+.miTabla{
+    width: fit-content;
+    text-align: center;
+}
+.miTabla img{
+    width: 25%;
+} 

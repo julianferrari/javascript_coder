@@ -158,8 +158,20 @@ function mostrar_carrito(servicio){
     let tabla = document.getElementById("tbody");
     tabla.append(fila);
     
+    let btn_quitar = document.querySelectorAll(".btn-danger");
+    for(let boton of btn_quitar){
+        boton.addEventListener("click", quitar_servicio);
+    }
+
 }
 
+function quitar_servicio(e){
+    let hijo = e.target;
+    let padre = hijo.parentNode;
+    let abuelo = padre.parentNode;
+
+    abuelo.remove();
+}
 
 function calcular_precio(item, envio, pago){
     let precio = parseInt(item.precio);

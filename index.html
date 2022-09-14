@@ -23,15 +23,24 @@
         <h3>Los servicios disponibles son:</h3>
         <ul id="servicios_list"></ul>
 
-        <h3>Elija un Servicio</h3>
-        <input type="text" id="servicio">
-        <button id="boton_servicio">Aceptar</button>
+        <div class="list-group" id="servicios_group">
+            <!-- <a href="#" class="list-group-item list-group-item-action active" aria-current="true">The current link item</a> -->
+            <!-- <a href="#" class="list-group-item list-group-item-action">A second link item</a> -->
+            <!-- <a href="#" class="list-group-item list-group-item-action">A third link item</a> -->
+            <!-- <a href="#" class="list-group-item list-group-item-action">A fourth link item</a> -->
+            <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
+          </div>
+
+
+        <br>
+        <h3>Filtrar por:</h3>
         <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
         <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
         <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
 
         <ul id="disponibles_list"></ul>
 
+        
         <div id="cards"></div>
         
         <div class="containter" id="miCarrito">

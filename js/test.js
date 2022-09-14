@@ -3,6 +3,7 @@ El proyecto permite al usuario adquirir un servicio (carpintero, plomero, electr
 En funcion del trabajo solicitado, envios y forma de pago se calculan los precios a abonar. 
 */
 
+/////////////////////////////////////////////////////////////////////
 // Clase "Servicio" con información del trabajador.
 class Servicio{
     constructor(nombre, apellido, oficio, calificacion, precio){
@@ -27,11 +28,12 @@ class Servicio{
     }
 }
 
+/////////////////////////////////////////////////////////////////////
 // Funcion para generar algunos servicios de forma aleatoria.
 function generar_servicios(cantidad){
     let lista_nombres = ["Juan","Pedro","Maria","Paula","Jose","Carlos","Raul","Pablo","Rocio"];
     let lista_apellidos = ["Garcia","Perez","Gutierrez","Hernandez","Fernandez","Ibarra","Mandeb"];
-    let lista_oficios = ["Electricista","Albañil","Plomero","Pintor","Mecanico","Arquitecto","Taxista","Decorador"];
+    let lista_oficios = ["Electricista","Albañil","Plomero","Pintor","Mecanico","Arquitecto","Taxista","Carpintero"];
 
     let lista_servicios = [];
     for(let x=0; x<cantidad; x++){
@@ -48,32 +50,6 @@ function generar_servicios(cantidad){
     return lista_servicios;
 }
 
-// Funciones para calcular los precios.
-function calcular(precio, recargo){
-    let total = precio + recargo;
-    return total
-}
-
-function recargos(precio, envio, pago){
-    let recargo = 0;
-    if(envio == "Y"){
-        recargo = 0.05 * precio;
-    }
-    if(pago == 2){
-        recargo += 0.1 * precio;
-    }
-    return recargo
-}
-
-function dolarizar(lista){
-    lista.precio = parseFloat(lista.precio) / 285; //Dolar hoy...
-    lista.precio = parseFloat(lista.precio.toFixed(2));
-}
-function pesificar(lista){
-    lista.precio = parseFloat(lista.precio) * 285; //Dolar hoy...
-    lista.precio = parseFloat(lista.precio.toFixed(2));
-}
-
 function get_servicios(lista){
     let lista_aux = []; 
     lista.forEach(function(item){ //Para que no muestre oficios repetidos.
@@ -84,21 +60,63 @@ function get_servicios(lista){
     return lista_aux
 }
 
+/////////////////////////////////////////////////////////////////////
+// Funciones para calcular los precios.
+function calcular(precio, recargo){
+    let total = precio + recargo;
+    return total
+}
+function recargos(precio, envio, pago){
+    let recargo = 0;
+    if(envio == "Y"){
+        recargo = 0.05 * precio;
+    }
+    if(pago == 2){
+        recargo += 0.1 * precio;
+    }
+    return recargo
+}
+function calcular_precio(item, envio, pago){
+    let precio = parseInt(item.precio);
+    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));  
+    let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
+    
+    temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + "\n";
+    temp += "El precio es de $ "+ precio + "\n";
+    temp += "Se añaden $ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
+    temp += "En total usted paga $ " + total;
 
+   return temp
+}
 
+/////////////////////////////////////////////////////////////////////
+function dolarizar(lista){
+    lista.precio = parseFloat(lista.precio) / 285; //Dolar hoy...
+    lista.precio = parseFloat(lista.precio.toFixed(2));
+}
+function pesificar(lista){
+    lista.precio = parseFloat(lista.precio) * 285; //Dolar hoy...
+    lista.precio = parseFloat(lista.precio.toFixed(2));
+}
+function ordenar_precio(a,b){
+    return parseFloat(a.precio)-parseFloat(b.precio)
+}
+
+/////////////////////////////////////////////////////////////////////
+//Funcion para mostrar los prestadores
 function mostrar_prestadores(){
     let disponibles_list = document.getElementById("cards");
     disponibles_list.innerHTML = "";
     for(let x=0; x<servicio_disponible.length; x++){
         let card = document.createElement("div");
         card.innerHTML =   `<div class="card" style="width: 18rem;">
-                                <img src="../assets/images/martillo.jpg" class="card-img-top" alt="...">
+                                <img src="../assets/images/${servicio_disponible[x].oficio}.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h3 class="card-title">${servicio_disponible[x].nombre} ${servicio_disponible[x].apellido}</h3>
                                     <h4 class="card-title">${servicio_disponible[x].oficio}</h4>  
                                     $<span class="card-title">${servicio_disponible[x].precio}</span>
                                     <h5 class="card-title">Calificación: ${servicio_disponible[x].calificacion}</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <p class="card-text">Descripción...</p>
                                     <a class="btn btn-primary boton_agregar">Agregar</a>
                                 </div>
                             </div>`
@@ -110,9 +128,9 @@ function mostrar_prestadores(){
     }
 }
 
-
+/////////////////////////////////////////////////////////////////////
+//Funciones para el carrito de compra
 let carrito = [];
-
 function agregar_servicio(e){
     let hijo = e.target;
     let padre = hijo.parentNode;
@@ -139,10 +157,7 @@ function agregar_servicio(e){
     let carrito_JSON = JSON.stringify(carrito);
     localStorage.setItem("carrito", carrito_JSON);
 
-
     mostrar_carrito(servicio);
-
-
 }
 
 function mostrar_carrito(servicio){
@@ -162,7 +177,6 @@ function mostrar_carrito(servicio){
     for(let boton of btn_quitar){
         boton.addEventListener("click", quitar_servicio);
     }
-
 }
 
 function quitar_servicio(e){
@@ -173,43 +187,37 @@ function quitar_servicio(e){
     abuelo.remove();
 }
 
-function calcular_precio(item, envio, pago){
-    let precio = parseInt(item.precio);
-    let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));  
-    let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
-    
-    temp = "Usted adquiere los servicios de " + item.oficio + " de " + item.nombre + "\n";
-    temp += "El precio es de $ "+ precio + "\n";
-    temp += "Se añaden $ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
-    temp += "En total usted paga $ " + total;
 
-   return temp
-}
 
-function ordenar_precio(a,b){
-    return parseFloat(a.precio)-parseFloat(b.precio)
-}
-
-// ----------------------------------------------------------
-// ----------------------------------------------------------
-// ----------------------------------------------------------
-
-let nombre = document.getElementById("nombre_usuario");
-
+/////////////////////////////////////////////////////////////////////
+// GENERAR LOS SERVICIOS (SIMULADO)
+//let nombre = document.getElementById("nombre_usuario");
 let lista_servicios = generar_servicios(100); //Genero una lista de servicios aleatoria.
 //console.log(lista_servicios[1].calificacion);
 //lista_servicios[1].get_presentacion();
 //lista_servicios[1].set_presentacion("Soy un profesional matriculado etc...");
 //lista_servicios[1].get_presentacion();
 
-let servicios_list = document.getElementById("servicios_list");
-let lista_aux = get_servicios(lista_servicios);
-for(let x=0; x<lista_aux.length; x++){
-    let li = document.createElement("li");
-    li.innerHTML = `<li>${lista_aux[x]}</li>`
-    servicios_list.append(li);
+/////////////////////////////////////////////////////////////////////
+// MOSTRAR LOS RUBROS DISPONIBLES
+cargar_servicios();
+
+function cargar_servicios(){
+    let servicios_list = document.getElementById("servicios_group");
+    let lista_aux = get_servicios(lista_servicios);
+    for(let x=0; x<lista_aux.length; x++){
+        let a = document.createElement("a");
+        a.innerHTML = `<a href="#a" class="list-group-item list-group-item-action servicios_group_list">${lista_aux[x]}</a>`
+        servicios_list.append(a);    
+    }
+    let boton_seleccion = document.querySelectorAll(".servicios_group_list");
+    for(let boton of boton_seleccion){
+        boton.addEventListener("click", seleccion_prestador);
+    }
 }
 
+/////////////////////////////////////////////////////////////////////
+//FORMAS DE MOSTRAR LOS RUBROS
 let checkBox1 = document.getElementById("ordenar_precio");
 let checkBox2 = document.getElementById("ordenar_calificacion");
 let checkBox3 = document.getElementById("mostrar_dolares");
@@ -224,33 +232,25 @@ checkBox2.addEventListener("click", function(){
     }
 })
 
+/////////////////////////////////////////////////////////////////////
+// MUESTRO LOS SERVICIOS DISPONIBLES PARA EL RUBRO ELEGIDO
 let flagDolar = false;
 let servicio_disponible;
-let boton_servicio = document.getElementById("boton_servicio");
-boton_servicio.addEventListener("click", function(){
-    let servicio = document.getElementById("servicio");   
-    let servicio_existe = lista_servicios.find(servicios => servicios.oficio == servicio.value);
+function seleccion_prestador(e){  
+    let servicio = e.target.textContent;
+    let servicio_existe = lista_servicios.find(servicios => servicios.oficio == servicio);
     if (servicio_existe){
-        servicio_disponible = lista_servicios.filter(servicios => servicios.oficio == servicio.value);
+        servicio_disponible = lista_servicios.filter(servicios => servicios.oficio == servicio);
         if((checkBox3.checked == false)&&(flagDolar==true)){servicio_disponible.map(pesificar);flagDolar=false;}
         if((checkBox3.checked == true)&&(flagDolar==false)){servicio_disponible.map(dolarizar);flagDolar=true;}
         if(checkBox1.checked == true){servicio_disponible.sort(ordenar_precio);}
         if(checkBox2.checked == true){servicio_disponible.sort((a,b) => parseInt(b.calificacion) - parseInt(a.calificacion));}           
-        mostrar_prestadores();
-        
-       
-    }else{
-        alert("Ese servicio no existe");
-    }
-})
+        mostrar_prestadores();         
+    }  
+}
 
-
-
-
-
-
-
-
+/////////////////////////////////////////////////////////////////////
+// SECCION PARA EL PAGO DEL SERVICIO (CALCULO DE PRECIOS)
 let checkBox_envio = document.getElementById("envio_domicilio");
 let checkBox_pagoMP = document.getElementById("pago_mp");
 let checkBox_pagoCBU = document.getElementById("pago_cbu");
@@ -264,7 +264,6 @@ checkBox_pagoCBU.addEventListener("click", function(){
         checkBox_pagoMP.checked = false;
     }
 })
-
 
 let resultado = document.getElementById("resultado");
 let boton_comprar = document.getElementById("boton_comprar");
@@ -285,6 +284,6 @@ boton_comprar.addEventListener("click", function(){
     }
 });
 
-
+/////////////////////////////////////////////////////////////////////
 
 

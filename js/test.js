@@ -131,6 +131,7 @@ function mostrar_prestadores(){
 /////////////////////////////////////////////////////////////////////
 //Funciones para el carrito de compra
 let carrito = [];
+let contador = 0;
 function agregar_servicio(e){
     let hijo = e.target;
     let padre = hijo.parentNode;
@@ -143,6 +144,7 @@ function agregar_servicio(e){
     let img_servicio = abuelo.querySelector("img").src; 
 
     let servicio = {
+        id: contador,
         nombre: nombre_servicio,
         oficio: oficio_servicio,
         precio: precio_servicio,
@@ -151,8 +153,9 @@ function agregar_servicio(e){
         cantidad: 1
     };
    
+    contador++;
     carrito.push(servicio);
-    console.log(carrito);
+    //console.log(contador);
     //Ahora lo paso a JSON porque no puedo guardar un arreglo de objetos.
     let carrito_JSON = JSON.stringify(carrito);
     localStorage.setItem("carrito", carrito_JSON);
@@ -160,17 +163,17 @@ function agregar_servicio(e){
     mostrar_carrito(servicio);
 }
 
+let tabla = document.getElementById("tbody");
 function mostrar_carrito(servicio){
     let fila = document.createElement("tr");
-    fila.innerHTML = `<td><img src="${servicio.imagen}"></td>
-                            <td>${servicio.nombre}</td>
-                            <td>${servicio.precio}</td>
-                            <td>${servicio.calificacion}</td>
-                            <td><button class="btn-danger">Quitar</button></td>`
-
-
-    
-    let tabla = document.getElementById("tbody");
+    fila.innerHTML =   `<td>${servicio.id}</td>
+                        <td><img src="${servicio.imagen}"></td>
+                        <td>${servicio.nombre}</td>
+                        <td>${servicio.precio}</td>
+                        <td>${servicio.calificacion}</td>
+                        <td><button class="btn-danger">Quitar</button></td>`
+   
+    //let tabla = document.getElementById("tbody");
     tabla.append(fila);
     
     let btn_quitar = document.querySelectorAll(".btn-danger");
@@ -184,7 +187,27 @@ function quitar_servicio(e){
     let padre = hijo.parentNode;
     let abuelo = padre.parentNode;
 
+    //console.log(abuelo);
+    //console.log(abuelo.querySelector("td").textContent);
+    let id_servicio = parseInt(abuelo.querySelector("td").textContent);
+           
+    carrito.splice(id_servicio, 1);
+    
+    //console.log("---------------------");
+    //console.log(id_servicio);
+    //console.log(carrito);    
+    tabla.innerHTML = ``;
+    for(let x=0; x<carrito.length; x++){
+        carrito[x].id = x;
+        mostrar_carrito(carrito[x]);
+    }
+    //console.log(carrito);    
+    //console.log("---------------------");
+
+    //contador--;
     abuelo.remove();
+    contador--;
+    //console.log(contador);
 }
 
 
@@ -274,14 +297,17 @@ boton_comprar.addEventListener("click", function(){
     if(checkBox_pagoMP.checked==true){pago=1;}
     if(checkBox_pagoCBU.checked==true){pago=2;}
 
-            
-    for(let i=0; i<carrito.length; i++){
-        let calculo = document.createElement("p");        
-        let texto = calcular_precio(carrito[i], envio, pago);    
-        calculo.innerHTML = `<p>${texto}</p>`;  
-        resultado.append(calculo);
-        //resultado.scrollIntoView();
+    resultado.innerHTML = ``;    
+    if(carrito.length){
+        for(let i=0; i<carrito.length; i++){
+            let calculo = document.createElement("p");        
+            let texto = calcular_precio(carrito[i], envio, pago);    
+            calculo.innerHTML = `<p>${texto}</p>`;  
+            resultado.append(calculo);
+            //resultado.scrollIntoView();
+        }
     }
+    resultado.scrollIntoView();
 });
 
 /////////////////////////////////////////////////////////////////////

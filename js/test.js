@@ -6,7 +6,8 @@ En funcion del trabajo solicitado, envios y forma de pago se calculan los precio
 /////////////////////////////////////////////////////////////////////
 // Clase "Servicio" con información del trabajador.
 class Servicio{
-    constructor(nombre, apellido, oficio, calificacion, precio){
+    constructor(id, nombre, apellido, oficio, calificacion, precio){
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.oficio = oficio;
@@ -38,13 +39,14 @@ function generar_servicios(cantidad){
     let lista_servicios = [];
     for(let x=0; x<cantidad; x++){
     
+        let id = x;
         let nombre = lista_nombres[parseInt(Math.random()*lista_nombres.length)];
         let apellido = lista_apellidos[parseInt(Math.random()*lista_apellidos.length)];
         let oficio = lista_oficios[parseInt(Math.random()*lista_oficios.length)];
         let calificacion = parseInt(Math.random()*5 + 1);
         let precio = parseInt(Math.random()*1000);
 
-        let nuevo_usuario = new Servicio(nombre, apellido, oficio, calificacion, precio);
+        let nuevo_usuario = new Servicio(id, nombre, apellido, oficio, calificacion, precio);
         lista_servicios.push(nuevo_usuario);
     }
     return lista_servicios;
@@ -109,7 +111,7 @@ function mostrar_prestadores(){
     disponibles_list.innerHTML = "";
     for(let x=0; x<servicio_disponible.length; x++){
         let card = document.createElement("div");
-        card.innerHTML =   `<div class="card" style="width: 18rem;">
+        card.innerHTML =   `<div class="card" id="${x}" style="width: 18rem;">
                                 <img src="../assets/images/${servicio_disponible[x].oficio}.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h3 class="card-title">${servicio_disponible[x].nombre} ${servicio_disponible[x].apellido}</h3>
@@ -131,20 +133,27 @@ function mostrar_prestadores(){
 /////////////////////////////////////////////////////////////////////
 //Funciones para el carrito de compra
 let carrito = [];
-let contador = 0;
+//let contador = 0;
 function agregar_servicio(e){
     let hijo = e.target;
     let padre = hijo.parentNode;
     let abuelo = padre.parentNode;
     
-    let nombre_servicio = padre.querySelector("h3").textContent;
+    let identificador = abuelo.id;
+    
+    let id_servicio = servicio_disponible[identificador].id;
+    let nombre_servicio = servicio_disponible[identificador].nombre + " " + servicio_disponible[identificador].apellido;
+    let oficio_servicio = servicio_disponible[identificador].oficio;
+    let precio_servicio = servicio_disponible[identificador].precio;
+    let calificacion_servicio = servicio_disponible[identificador].calificacion;
+    /*let nombre_servicio = padre.querySelector("h3").textContent;
     let oficio_servicio = padre.querySelector("h4").textContent;
     let precio_servicio = padre.querySelector("span").textContent;
-    let calificacion_servicio = padre.querySelector("h5").textContent;
+    let calificacion_servicio = padre.querySelector("h5").textContent;*/
     let img_servicio = abuelo.querySelector("img").src; 
 
     let servicio = {
-        id: contador,
+        id: id_servicio,
         nombre: nombre_servicio,
         oficio: oficio_servicio,
         precio: precio_servicio,
@@ -153,14 +162,27 @@ function agregar_servicio(e){
         cantidad: 1
     };
    
-    contador++;
-    carrito.push(servicio);
+    let flag = false;
+    carrito.forEach(function(item){
+        if(item.id == id_servicio){ //Si el servicio ya existe en el carrito
+            item.cantidad++;
+            flag = true;
+        }
+    })
+    console.log(carrito)
+    if(flag == false){
+        carrito.push(servicio); 
+        mostrar_carrito(servicio);
+    }
+    else{
+        actualizar_carrito(); 
+    } 
     //console.log(contador);
     //Ahora lo paso a JSON porque no puedo guardar un arreglo de objetos.
     let carrito_JSON = JSON.stringify(carrito);
     localStorage.setItem("carrito", carrito_JSON);
 
-    mostrar_carrito(servicio);
+    //mostrar_carrito(servicio);
 }
 
 let tabla = document.getElementById("tbody");
@@ -168,6 +190,7 @@ function mostrar_carrito(servicio){
     let fila = document.createElement("tr");
     fila.innerHTML =   `<td>${servicio.id}</td>
                         <td><img src="${servicio.imagen}"></td>
+                        <td>${servicio.cantidad}</td>
                         <td>${servicio.nombre}</td>
                         <td>${servicio.precio}</td>
                         <td>${servicio.calificacion}</td>
@@ -182,32 +205,35 @@ function mostrar_carrito(servicio){
     }
 }
 
+
+function actualizar_carrito(){
+    
+}
+
+
 function quitar_servicio(e){
     let hijo = e.target;
     let padre = hijo.parentNode;
     let abuelo = padre.parentNode;
 
-    //console.log(abuelo);
-    //console.log(abuelo.querySelector("td").textContent);
+  
+    //console.log("ANTES:",carrito);
     let id_servicio = parseInt(abuelo.querySelector("td").textContent);
-           
-    carrito.splice(id_servicio, 1);
-    
-    //console.log("---------------------");
-    //console.log(id_servicio);
-    //console.log(carrito);    
+    console.log("Queiro borrar el servicio con id:",id_servicio);       
+    let quitar_item=0;
+    for(let x=0; x<carrito.length; x++){
+        if(carrito[x].id == id_servicio){
+            quitar_item=x;
+            break;
+        }
+    }    
+    carrito.splice(quitar_item, 1);  
+    //console.log("DESPUES:",carrito);   
     tabla.innerHTML = ``;
     for(let x=0; x<carrito.length; x++){
-        carrito[x].id = x;
         mostrar_carrito(carrito[x]);
-    }
-    //console.log(carrito);    
-    //console.log("---------------------");
-
-    //contador--;
-    abuelo.remove();
-    contador--;
-    //console.log(contador);
+    }   
+    abuelo.remove();   
 }
 
 

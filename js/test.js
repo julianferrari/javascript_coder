@@ -79,7 +79,7 @@ function recargos(precio, envio, pago){
     return recargo
 }
 function calcular_precio(item, envio, pago){
-    let precio = parseInt(item.precio);
+    let precio = parseInt(item.precio * item.cantidad);
     let recargo = parseFloat(parseFloat(recargos(precio, envio, pago)).toFixed(2));  
     let total = parseFloat(parseFloat(calcular(precio, recargo)).toFixed(2));
     
@@ -88,7 +88,7 @@ function calcular_precio(item, envio, pago){
     temp += "Se añaden $ " + recargo + " de recargo por el envío y el medio de pago elegido.\n";
     temp += "En total usted paga $ " + total;
 
-   return temp
+   return {temp, total};
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -183,6 +183,7 @@ function agregar_servicio(e){
     localStorage.setItem("carrito", carrito_JSON);
 
     //mostrar_carrito(servicio);
+    makeToastify();
 }
 
 let tabla = document.getElementById("tbody");
@@ -195,8 +196,6 @@ function mostrar_carrito(servicio){
                         <td>${servicio.precio}</td>
                         <td>${servicio.calificacion}</td>
                         <td><button class="btn-danger">Quitar</button></td>`
-   
-    //let tabla = document.getElementById("tbody");
     tabla.append(fila);
     
     let btn_quitar = document.querySelectorAll(".btn-danger");
@@ -205,9 +204,11 @@ function mostrar_carrito(servicio){
     }
 }
 
-
 function actualizar_carrito(){
-    
+    tabla.innerHTML = ``;
+    carrito.forEach(function(servicio){
+        mostrar_carrito(servicio);
+    })
 }
 
 
@@ -217,7 +218,6 @@ function quitar_servicio(e){
     let abuelo = padre.parentNode;
 
   
-    //console.log("ANTES:",carrito);
     let id_servicio = parseInt(abuelo.querySelector("td").textContent);
     console.log("Queiro borrar el servicio con id:",id_servicio);       
     let quitar_item=0;
@@ -226,14 +226,20 @@ function quitar_servicio(e){
             quitar_item=x;
             break;
         }
-    }    
-    carrito.splice(quitar_item, 1);  
-    //console.log("DESPUES:",carrito);   
-    tabla.innerHTML = ``;
-    for(let x=0; x<carrito.length; x++){
-        mostrar_carrito(carrito[x]);
-    }   
-    abuelo.remove();   
+    } 
+    
+    if(carrito[quitar_item].cantidad>1){ //Hay más de uno.
+        carrito[quitar_item].cantidad--;
+        actualizar_carrito();
+    }
+    else{ //Solo hay uno.
+        carrito.splice(quitar_item, 1);    
+        tabla.innerHTML = ``;
+        for(let x=0; x<carrito.length; x++){
+            mostrar_carrito(carrito[x]);
+        }   
+        abuelo.remove();   
+    }
 }
 
 
@@ -323,19 +329,59 @@ boton_comprar.addEventListener("click", function(){
     if(checkBox_pagoMP.checked==true){pago=1;}
     if(checkBox_pagoCBU.checked==true){pago=2;}
 
-    resultado.innerHTML = ``;    
+    resultado.innerHTML = ``; 
+    precio_final = 0;   
     if(carrito.length){
         for(let i=0; i<carrito.length; i++){
             let calculo = document.createElement("p");        
-            let texto = calcular_precio(carrito[i], envio, pago);    
-            calculo.innerHTML = `<p>${texto}</p>`;  
+            let datos = calcular_precio(carrito[i], envio, pago);    
+            calculo.innerHTML = `<p>${datos.temp}</p>`;  
             resultado.append(calculo);
-            //resultado.scrollIntoView();
+            precio_final += datos.total;
+            console.log(precio_final);
         }
+        let precio_total = document.createElement("h5");
+        precio_total.innerHTML = `<h5>PRECIO FINAL: $${precio_final}</h5>`;
+        resultado.append(precio_total);
+        makeToastify_compra();
+    }
+    else{
+        makeAlert();
     }
     resultado.scrollIntoView();
 });
 
 /////////////////////////////////////////////////////////////////////
+//Librerías
 
+function makeToastify(){
+    Toastify({
+        text: "Se agregó un servicio al carrito",
+        duration: 1500,
+        gravity: "bottom",
+        destination: "#miCarrito",
+        style:{
+            fontSize: "20px",
+            color: "blue"
+        }
+    }).showToast();
+}
 
+function makeToastify_compra(){
+    Toastify({
+        text: "¡Gracias por su compra!",
+        duration: 1500,
+        gravity: "top",
+        style:{
+            fontSize: "20px",
+            background: "goldenrod"
+        }
+    }).showToast();
+}
+
+function makeAlert(){
+    Swal.fire({
+        icon: "error",
+        title: "No tiene nada en el carrito",
+    })
+}

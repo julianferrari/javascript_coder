@@ -1,3 +1,56 @@
+.grillas{
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(3,auto);
+    grid-template-areas: "header" "main" "footer";
+}
+
+
+
+main{
+    grid-area: main;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-template-rows: repeat(4,auto);
+    grid-template-areas: "presentacion presentacion" 
+                         "servicios_disponibles servicios_disponibles" 
+                         "myCards myCards" 
+                         "container_carrito pagar";
+}
+
+.presentacion{
+    grid-area: presentacion;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: mediumseagreen;
+}
+
+.servicios_disponibles{
+    grid-area: servicios_disponibles;
+    border: solid 2px goldenrod;
+}
+
+.servicios_disponibles .filtrado{
+    border-top: solid 1px goldenrod;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px;
+}
+
+.myCards{
+    grid-area: myCards;
+}
+.myCards .card{
+    margin: 2px;
+    border-radius: 10px;
+    align-items: center;
+    text-align: center;
+}
+.myCards .card:hover{
+    transform: scale(0.98);
+    background-color: goldenrod;
+    transition-duration: 0.25s;
+}
 #cards{
     display: flex;
     flex-direction: row;
@@ -5,15 +58,40 @@
     justify-content: center;
 }
 
-
-.miTabla{
-    width: fit-content;
+.container_carrito{
+    grid-area: container_carrito;
     text-align: center;
 }
+
+.miTabla{
+    /* width: 100%; */
+    text-align: center;
+}
+
+
 .miTabla img{
-    width: 25%;
+    width: 50%;
 } 
 
 #resultado{
     border: solid;
+}
+
+#miCarrito{
+    /* width: 100%; */
+    background-color: goldenrod;
+}
+
+
+.pagar{
+    grid-area: pagar;
+}
+.pagar h3{
+    text-align: center;
+}
+#formas_de_pago{
+    background-color: mediumseagreen;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px;
 }

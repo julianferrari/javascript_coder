@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Sweet Alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Toastify Library -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 
@@ -15,74 +20,83 @@
      
     <div class="grillas">
 
-        <h1>2da Entrega del Proyecto Final</h1>
-        <h2>Ferrari Julián</h2>
+        <header>
 
-        <p>Sistema para contratar un servicio y calculadora de precios</p>
+        </header>
 
-        <h3>Los servicios disponibles son:</h3>
-        <ul id="servicios_list"></ul>
+        <main>
 
-        <div class="list-group" id="servicios_group">
-            <!-- <a href="#" class="list-group-item list-group-item-action active" aria-current="true">The current link item</a> -->
-            <!-- <a href="#" class="list-group-item list-group-item-action">A second link item</a> -->
-            <!-- <a href="#" class="list-group-item list-group-item-action">A third link item</a> -->
-            <!-- <a href="#" class="list-group-item list-group-item-action">A fourth link item</a> -->
-            <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
-          </div>
+            <section class="presentacion">
+                <h1>Desafío: Incorporando librerias</h1>
+                <h2>Ferrari Julián</h2>
+                <p>Sistema para contratar un servicio y calculadora de precios</p>
+            </section>
 
+            <section class="servicios_disponibles">
+                                
+                <div class="filtrado">
+                    <h3>Filtrar por:</h3>
+                    <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
+                    <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
+                    <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
+                </div>
+                
+                <div class="list-group" id="servicios_group">
+                    <!-- <a href="#" class="list-group-item list-group-item-action active" aria-current="true">The current link item</a> -->
+                    <!-- <a href="#" class="list-group-item list-group-item-action">A second link item</a> -->
+                    <!-- <a href="#" class="list-group-item list-group-item-action">A third link item</a> -->
+                    <!-- <a href="#" class="list-group-item list-group-item-action">A fourth link item</a> -->
+                    <!-- <a class="list-group-item list-group-item-action disabled">A disabled link item</a> -->
+                </div>
+            </section>
+            
+            <section class="myCards" id="cards">
 
-        <br>
-        <h3>Filtrar por:</h3>
-        <input type="checkbox" id="ordenar_precio"><label for="">Ordenar por Precio</label>
-        <input type="checkbox" id="ordenar_calificacion"><label for="">Ordenar por Calificación</label>
-        <input type="checkbox" id="mostrar_dolares"><label for="">Mostrar Precios en US$</label>
+            </section>
+            
+            <!-- <section class="containter" id="miCarrito">  -->
+            <section class="container_carrito" id="miCarrito"> 
+                <h3>Mi carrito</h3>
+                <table class="table table-dark miTabla">
+                    <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>Imagen</td>
+                            <td>Cantidad</td>
+                            <td>Nombre</td>
+                            <td>Precio</td>
+                            <td>Calificación</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
 
-        <ul id="disponibles_list"></ul>
+                    </tbody>
+                </table>
+            </section>
 
-        
-        <div id="cards"></div>
-        
-        <div class="containter" id="miCarrito">
-            <h3>Mi carrito</h3>
-            <table class="table table-dark miTabla">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Imagen</td>
-                        <td>Cantidad</td>
-                        <td>Nombre</td>
-                        <td>Precio</td>
-                        <td>Calificación</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody id="tbody">
+            <section class="pagar" id="formas_de_pago">
+                <h3>Formas de Pago</h3>
+                <input type="checkbox" id="envio_domicilio"><label for="">Enviar a Domicilio</label>
+                <input type="checkbox" id="pago_mp" checked="checked"><label for="">Pagar con Mercado Pago</label>
+                <input type="checkbox" id="pago_cbu"><label for="">Pagar con CBU</label>
+                <button id="boton_comprar">COMPRAR</button>
+                <br>
+                <br>
+                <p id="resultado"></p>
+            </section>            
+        </main>
 
-                </tbody>
-            </table>
-        </div>
+        <footer>
 
-
-        <h3>Formas de Pago</h3>
-        <input type="checkbox" id="envio_domicilio"><label for="">Enviar a Domicilio</label>
-        <input type="checkbox" id="pago_mp" checked="checked"><label for="">Pagar con Mercado Pago</label>
-        <input type="checkbox" id="pago_cbu"><label for="">Pagar con CBU</label>
-        <button id="boton_comprar">COMPRAR</button>
-        <br>
-        <br>
-        <p id="resultado"></p>
-<!-- 
-        <h3>Ingrese el número del Prestador y presione ENTER</h3>
-        <input type="text" id="prestador">
-        <p id="resultado"></p>
- -->
-
-        <script src="./js/test.js"></script>
-        <script src="./js/popper.min.js"></script>
-        <script src="./js/bootstrap.js"></script>
-
+        </footer>
     </div>
+
+    <!-- <script src="sweetalert2.all.min.js"></script> -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./js/test.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.js"></script>
 </body>
 
 </html>

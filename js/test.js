@@ -385,3 +385,21 @@ function makeAlert(){
         title: "No tiene nada en el carrito",
     })
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// FETCH
+mostrar_cotizacion()
+function mostrar_cotizacion(){
+    // API DE COTIZACION DEL DOLAR: https://api.bluelytics.com.ar/v2/latest
+    let contenedor = document.getElementById("api_dolar");
+    fetch("https://api.bluelytics.com.ar/v2/latest")
+        .then(response => response.json()) //el objeto respuesta lo convierto en json porq no lo puedo consumir
+        .then(data => {
+            //console.log(data);
+            //console.log(data.blue.value_buy)
+            contenedor.innerHTML =  `<span> U$S --> COMPRA: $${data.blue.value_buy}</span>
+                                     <span> - VENTA: $${data.blue.value_sell}</span>
+                                     <a href="https://bluelytics.com.ar/#!/api" target="blank"> IR A LA API</a>`
+        })
+
+}

@@ -112,7 +112,7 @@ function mostrar_prestadores(){
     for(let x=0; x<servicio_disponible.length; x++){
         let card = document.createElement("div");
         card.innerHTML =   `<div class="card" id="${x}" style="width: 18rem;">
-                                <img src="../assets/images/${servicio_disponible[x].oficio}.jpg" class="card-img-top" alt="...">
+                                <img src="./assets/images/${servicio_disponible[x].oficio}.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h3 class="card-title">${servicio_disponible[x].nombre} ${servicio_disponible[x].apellido}</h3>
                                     <h4 class="card-title">${servicio_disponible[x].oficio}</h4>  

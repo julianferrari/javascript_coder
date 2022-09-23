@@ -25,6 +25,12 @@ main{
     background-color: mediumseagreen;
 }
 
+.presentacion #api_clima{
+    border: solid 2px black;
+    background-color: goldenrod;
+    font-weight: bold;
+}
+
 .servicios_disponibles{
     grid-area: servicios_disponibles;
     border: solid 2px goldenrod;

@@ -401,5 +401,18 @@ function mostrar_cotizacion(){
                                      <span> - VENTA: $${data.blue.value_sell}</span>
                                      <a href="https://bluelytics.com.ar/#!/api" target="blank"> IR A LA API</a>`
         })
+}
 
+mostrar_clima()
+function mostrar_clima(){
+    let contenedor = document.getElementById("api_clima");
+    let ciudad = "Bahia%20Blanca";
+    fetch("https://api.openweathermap.org/data/2.5/weather?q="+ciudad+"&units=metric&appid=7f921048cb0e27a6fdb9d8ec9fc12e3b")
+        .then(response => response.json()) //el objeto respuesta lo convierto en json porq no lo puedo consumir
+        .then(data => {
+            console.log(data);
+            contenedor.innerHTML =  `<span> ${data.name}</span>
+                                     <span> - Temp: ${data.main.temp}°C</span>
+                                     <span> - Humedad: ${data.main.humidity}%</span>`
+    })
 }

@@ -133,7 +133,6 @@ function mostrar_prestadores(){
 /////////////////////////////////////////////////////////////////////
 //Funciones para el carrito de compra
 let carrito = [];
-//let contador = 0;
 function agregar_servicio(e){
     let hijo = e.target;
     let padre = hijo.parentNode;
@@ -146,10 +145,6 @@ function agregar_servicio(e){
     let oficio_servicio = servicio_disponible[identificador].oficio;
     let precio_servicio = servicio_disponible[identificador].precio;
     let calificacion_servicio = servicio_disponible[identificador].calificacion;
-    /*let nombre_servicio = padre.querySelector("h3").textContent;
-    let oficio_servicio = padre.querySelector("h4").textContent;
-    let precio_servicio = padre.querySelector("span").textContent;
-    let calificacion_servicio = padre.querySelector("h5").textContent;*/
     let img_servicio = abuelo.querySelector("img").src; 
 
     let servicio = {
@@ -177,7 +172,7 @@ function agregar_servicio(e){
     else{
         actualizar_carrito(); 
     } 
-    //console.log(contador);
+    
     //Ahora lo paso a JSON porque no puedo guardar un arreglo de objetos.
     let carrito_JSON = JSON.stringify(carrito);
     localStorage.setItem("carrito", carrito_JSON);
